@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Test - Virtual Banking System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        pre {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏦 Virtual Banking System - API Test</h1>
+        <p>This page tests the backend API endpoints to ensure they're working correctly.</p>
+    </div>
+
+    <!-- Test Customer Registration -->
+    <div class="container">
+        <h2>1. Test Customer Registration</h2>
+        <div class="test-section">
+            <h3>Register New Customer</h3>
+            <input type="text" id="regUsername" placeholder="Username" value="testuser">
+            <input type="text" id="regPassword" placeholder="Password" value="password123">
+            <input type="text" id="regFirstName" placeholder="First Name" value="Test">
+            <input type="text" id="regLastName" placeholder="Last Name" value="User">
+            <input type="email" id="regEmail" placeholder="Email" value="test@example.com">
+            <input type="tel" id="regPhone" placeholder="Phone" value="1234567890">
+            <button onclick="testRegister()">Test Registration</button>
+            <div id="registerResult"></div>
+        </div>
+    </div>
+
+    <!-- Test Customer Login -->
+    <div class="container">
+        <h2>2. Test Customer Login</h2>
+        <div class="test-section">
+            <h3>Login Customer</h3>
+            <input type="text" id="loginUsername" placeholder="Username" value="testuser">
+            <input type="password" id="loginPassword" placeholder="Password" value="password123">
+            <button onclick="testLogin()">Test Login</button>
+            <div id="loginResult"></div>
+        </div>
+    </div>
+
+    <!-- Test Deposit -->
+    <div class="container">
+        <h2>3. Test Deposit Money</h2>
+        <div class="test-section">
+            <h3>Deposit Money</h3>
+            <input type="number" id="depositAmount" placeholder="Amount" value="100">
+            <input type="text" id="depositDescription" placeholder="Description" value="Test deposit">
+            <button onclick="testDeposit()">Test Deposit</button>
+            <div id="depositResult"></div>
+        </div>
+    </div>
+
+    <!-- Test Withdraw -->
+    <div class="container">
+        <h2>4. Test Withdraw Money</h2>
+        <div class="test-section">
+            <h3>Withdraw Money</h3>
+            <input type="number" id="withdrawAmount" placeholder="Amount" value="50">
+            <input type="text" id="withdrawDescription" placeholder="Description" value="Test withdrawal">
+            <button onclick="testWithdraw()">Test Withdraw</button>
+            <div id="withdrawResult"></div>
+        </div>
+    </div>
+
+    <!-- Test Get Transactions -->
+    <div class="container">
+        <h2>5. Test Get Transactions</h2>
+        <div class="test-section">
+            <h3>Get Customer Transactions</h3>
+            <button onclick="testGetTransactions()">Get Transactions</button>
+            <div id="transactionsResult"></div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'http://localhost:8080/api';
+        let currentCustomerId = null;
+
+        function displayResult(elementId, data, isError = false) {
+            const element = document.getElementById(elementId);
+            element.className = `test-section ${isError ? 'error' : 'success'}`;
+            element.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        }
+
+        async function testRegister() {
+            try {
+                const customerData = {
+                    username: document.getElementById('regUsername').value,
+                    password: document.getElementById('regPassword').value,
+                    firstName: document.getElementById('regFirstName').value,
+                    lastName: document.getElementById('regLastName').value,
+                    email: document.getElementById('regEmail').value,
+                    phoneNumber: document.getElementById('regPhone').value
+                };
+
+                const response = await fetch(`${API_BASE}/customers/register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(customerData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    currentCustomerId = result.id;
+                    displayResult('registerResult', result);
+                } else {
+                    displayResult('registerResult', result, true);
+                }
+            } catch (error) {
+                displayResult('registerResult', { error: error.message }, true);
+            }
+        }
+
+        async function testLogin() {
+            try {
+                const loginData = {
+                    username: document.getElementById('loginUsername').value,
+                    password: document.getElementById('loginPassword').value
+                };
+
+                const response = await fetch(`${API_BASE}/customers/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    currentCustomerId = result.id;
+                    displayResult('loginResult', result);
+                } else {
+                    displayResult('loginResult', result, true);
+                }
+            } catch (error) {
+                displayResult('loginResult', { error: error.message }, true);
+            }
+        }
+
+        async function testDeposit() {
+            if (!currentCustomerId) {
+                displayResult('depositResult', { error: 'Please login or register first' }, true);
+                return;
+            }
+
+            try {
+                const depositData = {
+                    customerId: currentCustomerId,
+                    amount: parseFloat(document.getElementById('depositAmount').value),
+                    description: document.getElementById('depositDescription').value
+                };
+
+                const response = await fetch(`${API_BASE}/transactions/deposit`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(depositData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    displayResult('depositResult', result);
+                } else {
+                    displayResult('depositResult', result, true);
+                }
+            } catch (error) {
+                displayResult('depositResult', { error: error.message }, true);
+            }
+        }
+
+        async function testWithdraw() {
+            if (!currentCustomerId) {
+                displayResult('withdrawResult', { error: 'Please login or register first' }, true);
+                return;
+            }
+
+            try {
+                const withdrawData = {
+                    customerId: currentCustomerId,
+                    amount: parseFloat(document.getElementById('withdrawAmount').value),
+                    description: document.getElementById('withdrawDescription').value
+                };
+
+                const response = await fetch(`${API_BASE}/transactions/withdraw`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(withdrawData)
+                });
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    displayResult('withdrawResult', result);
+                } else {
+                    displayResult('withdrawResult', result, true);
+                }
+            } catch (error) {
+                displayResult('withdrawResult', { error: error.message }, true);
+            }
+        }
+
+        async function testGetTransactions() {
+            if (!currentCustomerId) {
+                displayResult('transactionsResult', { error: 'Please login or register first' }, true);
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/transactions/customer/${currentCustomerId}`);
+
+                const result = await response.json();
+                
+                if (response.ok) {
+                    displayResult('transactionsResult', result);
+                } else {
+                    displayResult('transactionsResult', result, true);
+                }
+            } catch (error) {
+                displayResult('transactionsResult', { error: error.message }, true);
+            }
+        }
+
+        // Auto-test on page load
+        window.onload = function() {
+            console.log('API Test page loaded. Make sure the backend is running on http://localhost:8080');
+        };
+    </script>
+</body>
+</html>
