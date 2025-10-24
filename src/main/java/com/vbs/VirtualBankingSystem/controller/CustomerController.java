@@ -11,14 +11,22 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.Map;
 
+@CrossOrigin(
+    origins = {
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://virtual-banking-system.netlify.app"
+    },
+    maxAge = 3600
+)
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api/customer")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"}, maxAge = 3600)
 public class CustomerController {
+
     @Autowired
     private CustomerService customerService;
-    
+
     @PostMapping("/register")
     public ResponseEntity<?> registerCustomer(@RequestBody Customer customer) {
         try {
@@ -30,7 +38,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
-    
+
     @PostMapping("/login")
     public ResponseEntity<?> loginCustomer(@RequestBody LoginRequest loginRequest) {
         try {
@@ -42,7 +50,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error);
         }
     }
-    
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getCustomer(@PathVariable Long id) {
         try {
@@ -54,7 +62,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
     }
-    
+
     @GetMapping("/username/{username}")
     public ResponseEntity<?> getCustomerByUsername(@PathVariable String username) {
         try {
@@ -66,7 +74,7 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
     }
-    
+
     @GetMapping("/{id}/balance")
     public ResponseEntity<?> getCustomerBalance(@PathVariable Long id) {
         try {
@@ -82,24 +90,24 @@ public class CustomerController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
         }
     }
-    
+
     // Inner class for login request
     public static class LoginRequest {
         private String username;
         private String password;
-        
+
         public String getUsername() {
             return username;
         }
-        
+
         public void setUsername(String username) {
             this.username = username;
         }
-        
+
         public String getPassword() {
             return password;
         }
-        
+
         public void setPassword(String password) {
             this.password = password;
         }
