@@ -14,11 +14,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(
+    origins = {
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "https://virtual-banking-system.netlify.app"
+    },
+    maxAge = 3600
+)
 @RestController
-@RequestMapping("/api/transactions")
+@RequestMapping("/api/transaction")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"http://localhost:3000", "http://127.0.0.1:3000"}, maxAge = 3600)
 public class TransactionController {
+
     @Autowired
     private TransactionService transactionService;
 
@@ -26,9 +34,9 @@ public class TransactionController {
     public ResponseEntity<?> depositMoney(@RequestBody TransactionRequest request) {
         try {
             Transaction transaction = transactionService.depositMoney(
-                    request.getCustomerId(),
-                    request.getAmount(),
-                    request.getDescription()
+                request.getCustomerId(),
+                request.getAmount(),
+                request.getDescription()
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
         } catch (RuntimeException e) {
@@ -42,9 +50,9 @@ public class TransactionController {
     public ResponseEntity<?> withdrawMoney(@RequestBody TransactionRequest request) {
         try {
             Transaction transaction = transactionService.withdrawMoney(
-                    request.getCustomerId(),
-                    request.getAmount(),
-                    request.getDescription()
+                request.getCustomerId(),
+                request.getAmount(),
+                request.getDescription()
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(transaction);
         } catch (RuntimeException e) {
@@ -58,10 +66,10 @@ public class TransactionController {
     public ResponseEntity<?> transferMoney(@RequestBody TransferRequest request) {
         try {
             List<Transaction> transactions = transactionService.transferMoney(
-                    request.getFromCustomerId(),
-                    request.getToCustomerId(),
-                    request.getAmount(),
-                    request.getDescription()
+                request.getFromCustomerId(),
+                request.getToCustomerId(),
+                request.getAmount(),
+                request.getDescription()
             );
             return ResponseEntity.status(HttpStatus.CREATED).body(transactions);
         } catch (RuntimeException e) {
