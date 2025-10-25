@@ -1,28 +1,25 @@
 import axios from 'axios';
 import { fallbackAPI } from './api-fallback';
 
-const API_BASE_URL = process.env.REACT_APP_API_URL ;
+const API_BASE_URL = process.env.REACT_APP_API_URL;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 second timeout - increased for slower backends
+  timeout: 10000,
 });
 
-// Helper function to check if we should use fallback
 const shouldUseFallback = (error) => {
-  return error.code === 'ECONNREFUSED' || 
-         error.code === 'NETWORK_ERROR' || 
+  return error.code === 'ECONNREFUSED' ||
+         error.code === 'NETWORK_ERROR' ||
          error.code === 'ECONNABORTED' ||
          error.message.includes('Network Error') ||
          error.message.includes('timeout');
 };
 
-// Customer API endpoints
 export const customerAPI = {
-  // Register a new customer
   register: async (customerData) => {
     try {
       const response = await api.post('/customers/register', customerData);
@@ -32,10 +29,9 @@ export const customerAPI = {
     }
   },
 
-  // Login customer
   login: async (username, password) => {
     try {
-      const response = await api.post('/customers/login', {
+      const response = await api.post('/api/customer/login', {
         username,
         password
       });
@@ -45,7 +41,6 @@ export const customerAPI = {
     }
   },
 
-  // Get customer by ID
   getCustomerById: async (customerId) => {
     try {
       const response = await api.get(`/customers/${customerId}`);
@@ -55,7 +50,6 @@ export const customerAPI = {
     }
   },
 
-  // Get customer by username - NEW METHOD FOR TRANSFER
   getByUsername: async (username) => {
     try {
       console.log(`API: Getting customer by username: ${username}`);
@@ -64,8 +58,6 @@ export const customerAPI = {
       return response.data;
     } catch (error) {
       console.error('API: Get customer by username error:', error);
-      
-      // If it's a timeout, try once more with longer timeout
       if (error.code === 'ECONNABORTED') {
         console.log('Retrying customer search with longer timeout...');
         try {
@@ -76,12 +68,10 @@ export const customerAPI = {
           throw retryError.response?.data || retryError.message;
         }
       }
-      
       throw error.response?.data || error.message;
     }
   },
 
-  // Get customer balance
   getBalance: async (customerId) => {
     try {
       console.log(`API: Getting balance for customer ${customerId}`);
@@ -90,8 +80,6 @@ export const customerAPI = {
       return response.data;
     } catch (error) {
       console.error('API: Balance error:', error);
-      
-      // If it's a timeout, try once more with longer timeout
       if (error.code === 'ECONNABORTED') {
         console.log('Retrying balance request with longer timeout...');
         try {
@@ -102,7 +90,6 @@ export const customerAPI = {
           return await fallbackAPI.getBalance(customerId);
         }
       }
-      
       if (shouldUseFallback(error)) {
         console.log('Using fallback API for balance');
         return await fallbackAPI.getBalance(customerId);
@@ -112,9 +99,7 @@ export const customerAPI = {
   }
 };
 
-// Transaction API endpoints
 export const transactionAPI = {
-  // Deposit money
   deposit: async (customerId, amount, description) => {
     try {
       const response = await api.post('/transactions/deposit', {
@@ -128,7 +113,6 @@ export const transactionAPI = {
     }
   },
 
-  // Withdraw money
   withdraw: async (customerId, amount, description) => {
     try {
       const response = await api.post('/transactions/withdraw', {
@@ -142,7 +126,6 @@ export const transactionAPI = {
     }
   },
 
-  // Transfer money - NEW METHOD
   transfer: async (fromCustomerId, toCustomerId, amount, description) => {
     try {
       console.log(`API: Transferring ${amount} from customer ${fromCustomerId} to ${toCustomerId}`);
@@ -156,8 +139,6 @@ export const transactionAPI = {
       return response.data;
     } catch (error) {
       console.error('API: Transfer error:', error);
-      
-      // If it's a timeout, try once more with longer timeout
       if (error.code === 'ECONNABORTED') {
         console.log('Retrying transfer request with longer timeout...');
         try {
@@ -166,19 +147,17 @@ export const transactionAPI = {
             toCustomerId,
             amount,
             description
-          }, { timeout: 20000 }); // Extra long timeout for critical transfer operation
+          }, { timeout: 20000 });
           return retryResponse.data;
         } catch (retryError) {
           console.log('Transfer retry also failed');
           throw retryError.response?.data || retryError.message;
         }
       }
-      
       throw error.response?.data || error.message;
     }
   },
 
-  // Get customer transactions
   getTransactions: async (customerId) => {
     try {
       console.log(`API: Getting transactions for customer ${customerId}`);
@@ -187,8 +166,6 @@ export const transactionAPI = {
       return response.data;
     } catch (error) {
       console.error('API: Transactions error:', error);
-      
-      // If it's a timeout, try once more with longer timeout
       if (error.code === 'ECONNABORTED') {
         console.log('Retrying transactions request with longer timeout...');
         try {
@@ -200,7 +177,6 @@ export const transactionAPI = {
           return await fallbackAPI.getTransactions(customerId);
         }
       }
-      
       if (shouldUseFallback(error)) {
         console.log('Using fallback API for transactions');
         return await fallbackAPI.getTransactions(customerId);
@@ -209,7 +185,6 @@ export const transactionAPI = {
     }
   },
 
-  // Get customer passbook
   getPassbook: async (customerId) => {
     try {
       const response = await api.get(`/transactions/customer/${customerId}/passbook`);
@@ -219,7 +194,6 @@ export const transactionAPI = {
     }
   },
 
-  // Debug endpoint to check transactions
   debugTransactions: async (customerId) => {
     try {
       console.log(`API: Debug transactions for customer ${customerId}`);
@@ -232,7 +206,6 @@ export const transactionAPI = {
     }
   },
 
-  // Get specific transaction
   getTransaction: async (transactionId) => {
     try {
       const response = await api.get(`/transactions/${transactionId}`);
