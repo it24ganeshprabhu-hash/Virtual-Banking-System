@@ -13,8 +13,8 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                     "http://localhost:3000",
                     "http://127.0.0.1:3000",
-                    "https://virtual-banking-system.netlify.app",
-                    "https://vbs-frontend.netlify.app"
+                    "https://virtual-banking-system.vercel.app",
+                    "https://vbs-frontend.vercel.app"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
