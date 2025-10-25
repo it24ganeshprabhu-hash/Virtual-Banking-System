@@ -15,7 +15,7 @@ import java.util.Map;
     origins = {
         "http://localhost:3000",
         "http://127.0.0.1:3000",
-        "https://virtual-banking-system.netlify.app"
+        "https://virtual-banking-system.vercel.app"
     },
     maxAge = 3600
 )
