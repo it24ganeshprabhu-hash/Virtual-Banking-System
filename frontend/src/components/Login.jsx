@@ -21,7 +21,6 @@ const Login = () => {
       [name]: value
     }));
     
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -57,12 +56,18 @@ const Login = () => {
     try {
       const user = await customerAPI.login(formData.username, formData.password);
       console.log('Login successful, user data:', user);
+
+      if (!user || typeof user !== 'object') {
+        setErrors({ general: 'Login failed. No user data received.' });
+        return;
+      }
+
       login(user);
       navigate('/dashboard');
     } catch (error) {
       console.error('Login error:', error);
       setErrors({
-        general: error.error || 'Login failed. Please try again.'
+        general: typeof error === 'string' ? error : error.error || 'Login failed. Please try again.'
       });
     } finally {
       setLoading(false);
