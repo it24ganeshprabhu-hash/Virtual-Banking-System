@@ -22,7 +22,7 @@ const shouldUseFallback = (error) => {
 export const customerAPI = {
   register: async (customerData) => {
     try {
-      const response = await api.post('/api/customers/register', customerData);
+      const response = await api.post('/api/customer/register', customerData);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -43,7 +43,7 @@ export const customerAPI = {
 
   getCustomerById: async (customerId) => {
     try {
-      const response = await api.get(`/api/customers/${customerId}`);
+      const response = await api.get(`/api/customer/${customerId}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -53,7 +53,7 @@ export const customerAPI = {
   getByUsername: async (username) => {
     try {
       console.log(`API: Getting customer by username: ${username}`);
-      const response = await api.get(`/api/customers/username/${username}`);
+      const response = await api.get(`/api/customer/username/${username}`);
       console.log('API: Customer by username response:', response.data);
       return response.data;
     } catch (error) {
@@ -61,7 +61,7 @@ export const customerAPI = {
       if (error.code === 'ECONNABORTED') {
         console.log('Retrying customer search with longer timeout...');
         try {
-          const retryResponse = await api.get(`/api/customers/username/${username}`, { timeout: 15000 });
+          const retryResponse = await api.get(`/api/customer/username/${username}`, { timeout: 15000 });
           return retryResponse.data;
         } catch (retryError) {
           console.log('Customer search retry also failed');
@@ -75,7 +75,7 @@ export const customerAPI = {
   getBalance: async (customerId) => {
     try {
       console.log(`API: Getting balance for customer ${customerId}`);
-      const response = await api.get(`/api/customers/${customerId}/balance`);
+      const response = await api.get(`/api/customer/${customerId}/balance`);
       console.log('API: Balance response:', response.data);
       return response.data;
     } catch (error) {
@@ -83,7 +83,7 @@ export const customerAPI = {
       if (error.code === 'ECONNABORTED') {
         console.log('Retrying balance request with longer timeout...');
         try {
-          const retryResponse = await api.get(`/api/customers/${customerId}/balance`, { timeout: 15000 });
+          const retryResponse = await api.get(`/api/customer/${customerId}/balance`, { timeout: 15000 });
           return retryResponse.data;
         } catch (retryError) {
           console.log('Balance retry also failed, using fallback');
@@ -102,7 +102,7 @@ export const customerAPI = {
 export const transactionAPI = {
   deposit: async (customerId, amount, description) => {
     try {
-      const response = await api.post('/api/transactions/deposit', {
+      const response = await api.post('/api/transaction/deposit', {
         customerId,
         amount,
         description
@@ -115,7 +115,7 @@ export const transactionAPI = {
 
   withdraw: async (customerId, amount, description) => {
     try {
-      const response = await api.post('/api/transactions/withdraw', {
+      const response = await api.post('/api/transaction/withdraw', {
         customerId,
         amount,
         description
@@ -129,7 +129,7 @@ export const transactionAPI = {
   transfer: async (fromCustomerId, toCustomerId, amount, description) => {
     try {
       console.log(`API: Transferring ${amount} from customer ${fromCustomerId} to ${toCustomerId}`);
-      const response = await api.post('/api/transactions/transfer', {
+      const response = await api.post('/api/transaction/transfer', {
         fromCustomerId,
         toCustomerId,
         amount,
@@ -142,7 +142,7 @@ export const transactionAPI = {
       if (error.code === 'ECONNABORTED') {
         console.log('Retrying transfer request with longer timeout...');
         try {
-          const retryResponse = await api.post('/api/transactions/transfer', {
+          const retryResponse = await api.post('/api/transaction/transfer', {
             fromCustomerId,
             toCustomerId,
             amount,
@@ -161,7 +161,7 @@ export const transactionAPI = {
   getTransactions: async (customerId) => {
     try {
       console.log(`API: Getting transactions for customer ${customerId}`);
-      const response = await api.get(`/api/transactions/customer/${customerId}`);
+      const response = await api.get(`/api/transaction/customer/${customerId}`);
       console.log('API: Transactions response:', response.data);
       return response.data;
     } catch (error) {
@@ -169,7 +169,7 @@ export const transactionAPI = {
       if (error.code === 'ECONNABORTED') {
         console.log('Retrying transactions request with longer timeout...');
         try {
-          const retryResponse = await api.get(`/api/transactions/customer/${customerId}`, { timeout: 15000 });
+          const retryResponse = await api.get(`/api/transaction/customer/${customerId}`, { timeout: 15000 });
           console.log('API: Transactions retry response:', retryResponse.data);
           return retryResponse.data;
         } catch (retryError) {
@@ -187,7 +187,7 @@ export const transactionAPI = {
 
   getPassbook: async (customerId) => {
     try {
-      const response = await api.get(`/api/transactions/customer/${customerId}/passbook`);
+      const response = await api.get(`/api/transaction/customer/${customerId}/passbook`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -197,7 +197,7 @@ export const transactionAPI = {
   debugTransactions: async (customerId) => {
     try {
       console.log(`API: Debug transactions for customer ${customerId}`);
-      const response = await api.get(`/api/transactions/debug/customer/${customerId}`);
+      const response = await api.get(`/api/transaction/debug/customer/${customerId}`);
       console.log('API: Debug response:', response.data);
       return response.data;
     } catch (error) {
@@ -208,7 +208,7 @@ export const transactionAPI = {
 
   getTransaction: async (transactionId) => {
     try {
-      const response = await api.get(`/api/transactions/${transactionId}`);
+      const response = await api.get(`/api/transaction/${transactionId}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
