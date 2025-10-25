@@ -13,7 +13,7 @@ public class CorsConfig implements WebMvcConfigurer {
                 .allowedOrigins(
                     "http://localhost:3000",
                     "http://127.0.0.1:3000",
-                    "https://virtual-banking-system.onrender.com",
+                    "https://virtual-banking-system.onrender.com"
                     
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
