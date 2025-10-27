@@ -204,20 +204,7 @@ Frontend:
 
 This project is for educational and demonstration purposes only.
 
-## 🤝 Contributing
 
-This is a demo project. For production use, consider adding:
-- Password encryption (BCrypt)
-- JWT authentication
-- Input sanitization
-- Rate limiting
-- SSL/HTTPS
-- Comprehensive error handling
-- Unit and integration tests
-- Production database configuration
-- Security headers and CORS policies
-
----
 
 **Happy Banking! 🏦**
 
