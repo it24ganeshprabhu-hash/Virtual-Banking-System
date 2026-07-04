@@ -2,7 +2,7 @@
 
 A complete full-stack banking application built with Spring Boot (Backend) and React.js (Frontend) that provides secure online banking functionality.
 
-## 🏦 Features
+## Features
 
 ### Backend (Spring Boot)
 - **Customer Management**: Registration, login, and profile management
@@ -20,7 +20,7 @@ A complete full-stack banking application built with Spring Boot (Backend) and R
 - **User Authentication**: Secure login/logout functionality
 - **Transaction Management**: Easy deposit/withdrawal with validation
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
 - Java 17 or higher
@@ -77,7 +77,7 @@ The backend will be available at `http://localhost:8080`
 
 The frontend will be available at `http://localhost:3000`
 
-## 📋 API Endpoints
+## API Endpoints
 
 ### Customer Management
 ```
@@ -95,7 +95,7 @@ GET  /api/transactions/customer/{id}  - Get customer transactions
 GET  /api/transactions/customer/{id}/passbook - Get complete passbook
 ```
 
-## 🎨 Frontend Features
+## Frontend Features
 
 ### Pages & Components
 - **Login/Register**: Secure authentication with validation
@@ -111,7 +111,7 @@ GET  /api/transactions/customer/{id}/passbook - Get complete passbook
 - **Form Validation**: Real-time validation with error messages
 - **Modal Dialogs**: Clean transaction interfaces
 
-## 🗄️ Database Schema
+##  Database Schema
 
 ### Customer Table
 ```sql
@@ -135,7 +135,7 @@ GET  /api/transactions/customer/{id}/passbook - Get complete passbook
 - customer_id (Foreign Key)
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Backend Configuration
 - **Database**: MySQL with auto-table creation
@@ -149,7 +149,7 @@ GET  /api/transactions/customer/{id}/passbook - Get complete passbook
 - **State Management**: Context API for user state
 - **HTTP Client**: Axios for API communication
 
-## 🧪 Testing the Application
+## Testing the Application
 
 1. **Start both backend and frontend servers**
 2. **Open browser to `http://localhost:3000`**
@@ -162,7 +162,7 @@ GET  /api/transactions/customer/{id}/passbook - Get complete passbook
    - View transaction history
    - Export passbook data
 
-## 📱 Mobile Responsiveness
+## Mobile Responsiveness
 
 The application is fully responsive and includes:
 - Mobile-optimized navigation
@@ -171,14 +171,14 @@ The application is fully responsive and includes:
 - Optimized modal dialogs for mobile
 - Adaptive typography and spacing
 
-## 🔒 Security Notes
+## Security Notes
 
 - **Development Only**: This is a demo application without production security
 - **No Password Encryption**: Passwords are stored in plain text (for demo purposes)
 - **CORS Enabled**: All origins allowed (configure for production)
 - **No Authentication Tokens**: Simple session-based auth (implement JWT for production)
 
-## 🛠️ Development
+## Development
 
 ### Adding New Features
 1. **Backend**: Add endpoints in controllers, implement business logic in services
@@ -200,13 +200,13 @@ Frontend:
 └── src/           # Main application files
 ```
 
-## 📄 License
+## License
 
 This project is for educational and demonstration purposes only.
 
 
 
-**Happy Banking! 🏦**
+**Happy Banking! **
 
 
 
